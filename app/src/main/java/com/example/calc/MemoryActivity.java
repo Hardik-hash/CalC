@@ -10,6 +10,8 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -59,7 +61,7 @@ public class MemoryActivity extends AppCompatActivity {
         Data.setAdapter(dataListAdapter);
 
 
-
+      retrieveData();
 
     }
 
@@ -75,25 +77,20 @@ public class MemoryActivity extends AppCompatActivity {
                 dataListAdapter.setData(mDb.dataDao().loadAllData());
             }
         });  */
-      retrieveData();
+      //retrieveData();
 
         //dataListAdapter.setData(mDb.dataDao().loadAllData());
 
 
     }
     private void retrieveData() {
-        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+        final LiveData<List<DataEntry>> data = mDb.dataDao().loadAllData();
+        // We will be able to simplify this once we learn more
+        // about Android Architecture Components
+        data.observe(this, new Observer<List<DataEntry>>() {
             @Override
-            public void run() {
-                final List<DataEntry> data = mDb.dataDao().loadAllData();
-                // We will be able to simplify this once we learn more
-                // about Android Architecture Components
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        dataListAdapter.setData(data);
-                    }
-                });
+            public void onChanged(List<DataEntry> dataEntries) {
+                dataListAdapter.setData(dataEntries);
             }
         });
     }

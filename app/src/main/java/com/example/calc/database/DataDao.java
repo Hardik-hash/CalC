@@ -3,6 +3,7 @@ package com.example.calc.database;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -15,7 +16,7 @@ import java.util.Stack;
 public interface DataDao {
 
     @Query("SELECT * FROM calc")
-    List<DataEntry> loadAllData();
+    LiveData<List<DataEntry>> loadAllData();
 
     @Insert
     void insertData(DataEntry dataEntry);
