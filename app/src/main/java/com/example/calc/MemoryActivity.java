@@ -59,30 +59,10 @@ public class MemoryActivity extends AppCompatActivity {
         mDb = AppDatabase.getInstance(getApplicationContext());
 
         Data.setAdapter(dataListAdapter);
-
-
       retrieveData();
-
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //Data.setAdapter(dataListAdapter);
-      //  id.setText(mDb.dataDao().loadAllData());
 
-/*        AppExecutors.getInstance().diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                dataListAdapter.setData(mDb.dataDao().loadAllData());
-            }
-        });  */
-      //retrieveData();
-
-        //dataListAdapter.setData(mDb.dataDao().loadAllData());
-
-
-    }
     private void retrieveData() {
         final LiveData<List<DataEntry>> data = mDb.dataDao().loadAllData();
         // We will be able to simplify this once we learn more
